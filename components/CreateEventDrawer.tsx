@@ -11,7 +11,7 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "@/components/ui/drawer";
-import { EventForm, EventFormData } from "./EventForm";
+import { EventForm } from "./EventForm";
 
 export function CreateEventDrawer() {
   const searchParams = useSearchParams();
@@ -23,9 +23,9 @@ export function CreateEventDrawer() {
     setIsOpen(create === "true");
   }, [searchParams]);
 
-  const handleSubmit = (formData: EventFormData) => {
+  const handleSubmit = () => {
     // Add your submit logic here
-    console.log("Form submitted with data:", formData);
+
     handleClose();
   };
 

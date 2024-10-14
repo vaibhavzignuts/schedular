@@ -12,6 +12,9 @@ import {
   SelectValue,
 } from "./ui/select";
 import { Button } from "./ui/button";
+import useFetch from "@/app/hooks/use-fetch";
+import { createEvent } from "@/actions/events";
+import { useRouter } from "next/navigation";
 
 // Assuming this is your event schema
 const eventSchema = z.object({
@@ -22,7 +25,7 @@ const eventSchema = z.object({
 });
 
 interface EventFormProps {
-  onSubmitForm: (data: EventFormData) => void;
+  onSubmitForm: () => void;
 }
 
 export type EventFormData = z.infer<typeof eventSchema>;
@@ -41,9 +44,15 @@ export function EventForm({ onSubmitForm }: EventFormProps) {
     },
   });
 
+  const { loading, error, fn: fncreateEvent } = useFetch(createEvent);
+
+  const router = useRouter();
+
   const onSubmit = (data: EventFormData) => {
-    onSubmitForm(data);
+    fncreateEvent(data);
+    if (!loading && !error) onSubmitForm();
     // Handle form submission
+    router.refresh();
   };
 
   return (
@@ -125,9 +134,9 @@ export function EventForm({ onSubmitForm }: EventFormProps) {
           </p>
         )}
       </div>
-
-      <Button type="submit" className="w-full">
-        Create Event
+      {error && <p className="text-red-500 text-sm mt-1">{error.message}</p>}
+      <Button type="submit" disabled={loading} className="w-full">
+        {loading ? "submiting..." : "Create Event"}
       </Button>
     </form>
   );
