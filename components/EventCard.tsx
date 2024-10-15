@@ -11,18 +11,28 @@ import {
 } from "@/components/ui/card";
 import { Button } from "./ui/button";
 import { Link, Trash2 } from "lucide-react";
+import useFetch from "@/app/hooks/use-fetch";
+import { useRouter } from "next/navigation";
+import { deleteEvent } from "@/actions/events";
 
 const EventCard = ({ event, username, isPublic = false }: any) => {
   const [iscopied, setisCopied] = useState(false);
+  const router = useRouter();
 
   const handleCopy = async () => {
-    console.log("hl");
     await navigator.clipboard.writeText(
       `${window.location.origin}/${username}/${event.id}`
     );
-    console.log("hlo");
     setisCopied(true);
     setTimeout(() => setisCopied(false), 2000);
+  };
+
+  const { loading, error, fn: fnDeleteevent } = useFetch(deleteEvent);
+  const handleDelete = async () => {
+    if (window.confirm("Are you sure you want to delete this event?")) {
+      await fnDeleteevent(event.id);
+      router.refresh();
+    }
   };
 
   return (
@@ -45,9 +55,17 @@ const EventCard = ({ event, username, isPublic = false }: any) => {
             <Link className="mr-2 h-4 w-4" />{" "}
             {iscopied ? "Copied" : "Copy Link"}
           </Button>
-          <Button variant="destructive">
-            <Trash2 className="mr-2 h-4 w-4" /> Delete
+          <Button
+            variant="destructive"
+            onClick={handleDelete}
+            disabled={loading}
+          >
+            <Trash2 className="mr-2 h-4 w-4" />{" "}
+            {loading ? "deleting..." : "delete"}
           </Button>
+          {error && (
+            <p className="text-red-500 text-sm mt-1">{error.message}</p>
+          )}
         </CardFooter>
       </Card>
     </div>
