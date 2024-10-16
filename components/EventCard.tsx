@@ -27,7 +27,16 @@ const EventCard = ({ event, username, isPublic = false }: any) => {
     setTimeout(() => setisCopied(false), 2000);
   };
 
-  const { loading, error, fn: fnDeleteevent } = useFetch(deleteEvent);
+  const handleCardClick = (e) => {
+    if (e.target.tagName !== "BUTTON" && e.target.tagName !== "SVG") {
+      window?.open(
+        `${window?.location.origin}/${username}/${event.id}`,
+        "_blank"
+      );
+    }
+  };
+
+  const { loading, fn: fnDeleteevent } = useFetch(deleteEvent);
   const handleDelete = async () => {
     if (window.confirm("Are you sure you want to delete this event?")) {
       await fnDeleteevent(event.id);
@@ -37,7 +46,10 @@ const EventCard = ({ event, username, isPublic = false }: any) => {
 
   return (
     <div>
-      <Card className="flex flex-col gap-2 cursor-pointer">
+      <Card
+        className="flex flex-col gap-2 cursor-pointer"
+        onClick={handleCardClick}
+      >
         <CardHeader>
           <CardTitle>{event.title}</CardTitle>
           <CardDescription className="flex justify-between">
@@ -50,23 +62,26 @@ const EventCard = ({ event, username, isPublic = false }: any) => {
         <CardContent>
           <p>{event.description}</p>
         </CardContent>
-        <CardFooter className="flex gap-2">
-          <Button variant="outline" onClick={handleCopy}>
-            <Link className="mr-2 h-4 w-4" />{" "}
-            {iscopied ? "Copied" : "Copy Link"}
-          </Button>
-          <Button
-            variant="destructive"
-            onClick={handleDelete}
-            disabled={loading}
-          >
-            <Trash2 className="mr-2 h-4 w-4" />{" "}
-            {loading ? "deleting..." : "delete"}
-          </Button>
-          {error && (
-            <p className="text-red-500 text-sm mt-1">{error.message}</p>
-          )}
-        </CardFooter>
+        {!isPublic && (
+          <CardFooter className="flex gap-2">
+            <Button
+              variant="outline"
+              onClick={handleCopy}
+              className="flex items-center"
+            >
+              <Link className="mr-2 h-4 w-4" />
+              {iscopied ? "Copied!" : "Copy Link"}
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={handleDelete}
+              disabled={loading}
+            >
+              <Trash2 className="mr-2 h-4 w-4" />
+              {loading ? "Deleting..." : "Delete"}
+            </Button>
+          </CardFooter>
+        )}
       </Card>
     </div>
   );

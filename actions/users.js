@@ -60,6 +60,5 @@ export async function getUserByUsername(username) {
       },
     },
   });
-
   return user;
 }
