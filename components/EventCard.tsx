@@ -15,7 +15,7 @@ import useFetch from "@/app/hooks/use-fetch";
 import { useRouter } from "next/navigation";
 import { deleteEvent } from "@/actions/events";
 
-const EventCard = ({ event, username, isPublic = false }: any) => {
+const EventCard = ({ event, username, isPublic = false }) => {
   const [iscopied, setisCopied] = useState(false);
   const router = useRouter();
 
