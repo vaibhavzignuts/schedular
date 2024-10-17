@@ -101,6 +101,7 @@ export async function getEventDetails(username, eventId) {
           name: true,
           email: true,
           imageUrl: true,
+          username: true,
         },
       },
     },
