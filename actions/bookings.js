@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/lib/prisma";
-import { clerkClient } from "@clerk/nextjs/server";
+import { clerkClient, auth } from "@clerk/nextjs/server";
 import { google } from "googleapis";
 
 export async function createBooking(bookingData) {
@@ -72,5 +72,25 @@ export async function createBooking(bookingData) {
   } catch (error) {
     console.error("Error creating booking:", error);
     return { success: false, error: error.message };
+  }
+}
+
+export async function updateBookingStatus(bookingId, newStatus) {
+  try {
+    const { userId } = auth();
+    if (!userId) {
+      throw new Error("Unauthorized");
+    }
+
+    const booking = await db.booking.update({
+      where: { id: bookingId },
+      data: { status: newStatus },
+    });
+
+    // Don't return the full Prisma object to avoid any serialization issues
+    return { success: true };
+  } catch (error) {
+    console.error("Error updating booking status:", error);
+    return { success: false, error: error?.message || "Unknown error" };
   }
 }

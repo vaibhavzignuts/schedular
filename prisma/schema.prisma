@@ -36,6 +36,8 @@ model Event {
   user        User     @relation("UserEvents", fields: [userId], references: [id])
   bookings    Booking[]
   isPrivate   Boolean  @default(true)
+  isVirtual   Boolean  @default(false)
+  color       String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
@@ -49,6 +51,8 @@ model Booking {
   name           String   // Name of the person booking the event
   email          String   // Email of the person booking the event
   additionalInfo String?  // Optional additional information from the person booking
+  notes          String?  // Doctor's notes on the appointment
+  status         String   @default("CONFIRMED") // CONFIRMED, CHECKED_IN, IN_PROGRESS, COMPLETED, CANCELLED, NO_SHOW
   startTime      DateTime
   endTime        DateTime
   meetLink       String  // Google Meet link for the booking

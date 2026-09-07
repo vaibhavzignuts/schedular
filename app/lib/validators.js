@@ -53,6 +53,8 @@ export const eventSchema = z.object({
   duration: z.number().int().positive("Duration must be a positive number"),
 
   isPrivate: z.boolean(),
+  isVirtual: z.boolean().optional().default(false),
+  color: z.string().optional(),
 });
 
 export const bookingSchema = z.object({
