@@ -13,6 +13,10 @@ export default clerkMiddleware((auth, req) => {
 
     return auth().redirectToSignIn();
   }
+}, {
+  frontendApiProxy: {
+    enabled: true,
+  }
 });
 
 export const config = {
