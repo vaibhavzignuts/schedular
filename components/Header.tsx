@@ -27,16 +27,14 @@ const Header = async () => {
             Create Event
           </Button>
         </Link>
-        <Link href={"/sign-in"}>
-          <SignedOut>
-            <SignInButton forceRedirectUrl="/dashboard">
-              <Button variant="outline">Login</Button>
-            </SignInButton>
-          </SignedOut>
-          <SignedIn>
-            <Usermenu />
-          </SignedIn>
-        </Link>
+        <SignedOut>
+          <SignInButton forceRedirectUrl="/dashboard">
+            <Button variant="outline">Login</Button>
+          </SignInButton>
+        </SignedOut>
+        <SignedIn>
+          <Usermenu />
+        </SignedIn>
       </div>
     </nav>
   );

@@ -4,7 +4,7 @@ import React from "react";
 const page = () => {
   return (
     <div>
-      <SignUp />
+      <SignUp routing="path" path="/sign-up" fallbackRedirectUrl="/dashboard" />
     </div>
   );
 };
